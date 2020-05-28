@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from keras.models import Model
 from keras.regularizers import l2
 from keras.layers import Dense, Input
-from utils import sample_random, plot_decision_boundary, sample_highest_entropy
+#from utils import sample_random, plot_decision_boundary, sample_highest_entropy
 
 
 #################### INITIAL DATA #################### 

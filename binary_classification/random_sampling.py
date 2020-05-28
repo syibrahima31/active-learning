@@ -41,7 +41,7 @@ data_rs = np.copy(x)
 
 # Now we train a logistic regression clasifier on the data previously sampled
 def logistic_regression():
-    x_ = Input(shape=(2,))    
+    x_ = Input(shape=(2,))     
     out = Dense(1, activation='sigmoid', activity_regularizer=l2())(x_)
     model = Model(x_, out)
     model.compile(optimizer='SGD', loss='binary_crossentropy', metrics=['accuracy'])
@@ -64,7 +64,7 @@ def active_learning(data, n_iter, n_sample, epochs):
     weights = []
     for i in range(n_iter):
         print("Iteration: {}".format(i+1))
-        sampled_data, data = sample_random(n_sample,data)
+        sampled_data, data = sample_random(n_sample, data)
         if i == 0:
             training_data = sampled_data
         else:

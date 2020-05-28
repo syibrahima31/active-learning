@@ -7,14 +7,14 @@ Created on Sat Dec 21 13:47:43 2019
 """
 
 import numpy as np
+import pandas as pd
 import matplotlib.pyplot as plt
 import sklearn
 from keras.models import Model
 from keras.regularizers import l2
 from keras.layers import Dense, Input
 import keras.backend as K
-from utils import *
-
+import utils 
 
 
 #################### INITIAL DATA #################### 

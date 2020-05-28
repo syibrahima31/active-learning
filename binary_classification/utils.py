@@ -21,9 +21,12 @@ def sample_random(n_sample, data):
         new_data: the n_sample from data
         data: data - new_data
     """
+    if n_sample > data.shape[0]:
+        return print ("n_sample doit etre inferieur a la taille de notre tableau")
     len_data = data.shape[0]
     # Sampling from uniform distribution
-    indices = np.random.uniform(0,len_data,size = n_sample).astype(np.int16)
+    indices = np.random.choice(range(len_data), n_sample)
+    #indices = np.random.uniform(0,len_data,size = n_sample).astype(np.int16)
     new_data = data[indices,:]
     data = np.delete(data,indices, axis=0)
     return new_data, data
@@ -37,7 +40,7 @@ def plot_decision_boundary(weight):
     """
     w_,b_ = weight[-1]    
     line_x = np.linspace(-1,1,100)
-    a = -w_[0]/w_[1]
+    a = -w_[0]/w_[1]                   
     b = -b_ / w_[1]    
     line_y = a*line_x + b
     return line_x, line_y
@@ -81,3 +84,35 @@ def sample_highest_entropy(n_sample, model, data):
     data_with_high_entropy = data[id_high_entropies]
     data = np.delete(data, id_high_entropies, axis=0)
     return data_with_high_entropy, data
+
+#####################################
+    
+def  sample_highest_margin(model, data):
+    
+    pred = model.predict(data[:, :2]).ravel()
+    pred_others = 1-pred
+    margin = np.abs(pred-pred_others)
+    margin = margin.reshape(data.shape[0], 1)
+    data = np.concatenate((data, margin), axis=1) 
+    index = data.argsort()
+    data = np.take_along_axis(data, index, axis=0)
+    data_add_training = data[-5:, 0:3] # donner ajouter dans la base_trainig 
+    rows_rest = data.shape[0]-5
+      
+    data_labelled = data[0:rows_rest-1, 0:3]
+    return data_add_training, data_labelled
+
+
+def sample_highest_least_confidence(model, data):
+    pred = model.predict(data[:, :2]).ravel()
+    pred_others = 1-pred
+    max_pred = np.maximum(pred, pred_others)
+    max_pred = max_pred.reshape(data.shape[0], 1)
+    data = np.concatenate((data, max_pred), axis=1)
+    index = data.argsort()
+    data = np.take_along_axis(data, index , axis=0)
+    data_add_training = data[-5:, 0:3] 
+    rows_rest = data.shape[0]-5
+    
+    data_labelled = data[0:rows_rest-1, 0:3]
+    return data_add_training, data_labelled

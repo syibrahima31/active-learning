@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Tue May 26 10:01:05 2020
+Created on Wed May 27 23:00:42 2020
 
 @author: ibrahima
 """
+
+
 import numpy as np 
 import matplotlib.pyplot as plt 
 import keras 
@@ -33,17 +35,7 @@ plt.legend()
 
 # Now, we duplicate in two the dataset to use in each procedure
 # random sampling with data_rs, and uncertainty sampling with data_us
-data_ms = np.copy(x)
-
-def LogisticRegression():
-    
-    model = keras.models.Sequential()
-    model.add(keras.layers.Dense(1,input_shape=(2,), activation="sigmoid"))  
-    model.compile(optimizer='SGD', loss='binary_crossentropy', metrics=['accuracy'])
-    
-    return model 
-
-
+data_ls = np.copy(x)
 
 def active_learning(data, n_iter, n_sample, epochs):
     """
@@ -79,29 +71,29 @@ def active_learning(data, n_iter, n_sample, epochs):
     return evaluation, weights, training_data
 
 
-evaluation_ms, weights_ms, training_ms  = active_learning(data_ms, n_iter=20, n_sample=10, epochs=500)
+evaluation_ls, weights_ls, training_ls  = active_learning(data_ls, n_iter=20, n_sample=10, epochs=500)
 
 
 
-line_ms_x, line_ms_y = plot_decision_boundary(weights_ms)
+line_ls_x, line_ls_y = plot_decision_boundary(weights_ls)
 
 # Plot the decision boundary learned with the uniformly sampled data
-id0 = training_ms[:,2] == 0
-id1 = training_ms[:,2] == 1
-rs_id0 = training_ms[id0]
-rs_id1 = training_ms[id1]
+id0 = training_ls[:,2] == 0
+id1 = training_ls[:,2] == 1
+rs_id0 = training_ls[id0]
+rs_id1 = training_ls[id1]
 
 # Start with just the data we trained with
 plt.scatter(rs_id0[:,0], rs_id0[:,1], s=30., label='N1')
 plt.scatter(rs_id1[:,0], rs_id1[:,1], s=30., label='N2')
-plt.plot(line_ms_x, line_ms_y, label="Margin Sampling")
+plt.plot(line_ls_x, line_ls_y, label="Margin Sampling")
 plt.title("Decision Boundary with the data we trained on ")
 plt.legend()
 
 # Plot the decition boundary with all the data
 plt.scatter(x1[:,0], x1[:,1], s=10., label='N1')
 plt.scatter(x2[:,0], x2[:,1], s=10., label='N2')
-plt.plot(line_ms_x, line_ms_y, label="Margin Sampling")
+plt.plot(line_ls_x, line_ls_y, label="Margin Sampling")
 plt.title("Decision Boundary with Total Data")
 plt.legend()
 
