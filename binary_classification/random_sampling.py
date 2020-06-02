@@ -83,7 +83,7 @@ def active_learning(data, n_iter, n_sample, epochs):
     return evaluation, weights, training_data
     
 
-evaluation_rs, weights_rs, training_rs = active_learning(data_rs, n_iter=10, n_sample=10, epochs=500)  
+evaluation_rs, weights_rs, training_rs = active_learning(data_rs, n_iter=39, n_sample=10, epochs=500)  
 
 line_rs_x, line_rs_y = plot_decision_boundary(weights_rs)
 
@@ -96,7 +96,7 @@ rs_id1 = training_rs[id1]
 # Start with just the data we trained with
 plt.scatter(rs_id0[:,0], rs_id0[:,1], s=30., label='N1')
 plt.scatter(rs_id1[:,0], rs_id1[:,1], s=30., label='N2')
-plt.plot(line_rs_x, line_rs_y, label="Uncertainty Sampling")
+plt.plot(line_rs_x, line_rs_y, label="Random Sampling")
 plt.title("Decision Boundary with the data we trained on ")
 plt.legend()
 

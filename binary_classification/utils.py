@@ -89,30 +89,44 @@ def sample_highest_entropy(n_sample, model, data):
     
 def  sample_highest_margin(model, data):
     
-    pred = model.predict(data[:, :2]).ravel()
-    pred_others = 1-pred
-    margin = np.abs(pred-pred_others)
-    margin = margin.reshape(data.shape[0], 1)
-    data = np.concatenate((data, margin), axis=1) 
-    index = data.argsort()
-    data = np.take_along_axis(data, index, axis=0)
-    data_add_training = data[-5:, 0:3] # donner ajouter dans la base_trainig 
-    rows_rest = data.shape[0]-5
+    pred = model.predict(data[:, :2]).ravel() # predict unlabeled data 
+    
+    pred_others = 1-pred         # compute  the proabilities of the second class  
+    margin = np.abs(pred-pred_others) # compute the difference and take the max 
+    margin = margin.reshape(data.shape[0], 1) # reshaping margin 
+    data = np.concatenate((data, margin), axis=1) # add the vector to the unlabeled data  
+    index = data.argsort(axis=0)                 #  get the indexes to sort by margin
+    data = np.take_along_axis(data, index, axis=0)  # the new data sorting 
+   
+    rows_rest = data.shape[0]  #  
+    
+    data_add_training = data[rows_rest-10 :, 0:3]  # take the las 10 rows 
       
-    data_labelled = data[0:rows_rest-1, 0:3]
+    data_labelled = data[0:rows_rest-10, 0:3]     # data without the last 10 rows 
+        
     return data_add_training, data_labelled
 
 
 def sample_highest_least_confidence(model, data):
+    
     pred = model.predict(data[:, :2]).ravel()
     pred_others = 1-pred
-    max_pred = np.maximum(pred, pred_others)
+    max_pred = np.maximum(pred, pred_others) ## only difference take the maximum
     max_pred = max_pred.reshape(data.shape[0], 1)
     data = np.concatenate((data, max_pred), axis=1)
-    index = data.argsort()
+    index = data.argsort(axis=0)
     data = np.take_along_axis(data, index , axis=0)
-    data_add_training = data[-5:, 0:3] 
-    rows_rest = data.shape[0]-5
     
-    data_labelled = data[0:rows_rest-1, 0:3]
+    rows_rest = data.shape[0]
+    
+    data_labelled = data[0:rows_rest-10, 0:3]
+    data_add_training = data[rows_rest-10:, 0:3] 
+   
     return data_add_training, data_labelled
+
+
+
+
+
+
+

@@ -10,6 +10,10 @@ import matplotlib.pyplot as plt
 import keras 
 from utils import *
 
+from keras.models import Model
+from keras.regularizers import l2
+from keras.layers import Dense, Input
+
 
 #################### INITIAL DATA #################### 
 # We start by generating data from two normal distribution on the plane.
@@ -43,6 +47,13 @@ def LogisticRegression():
     
     return model 
 
+# def logistic_regression():
+#     x_ = Input(shape=(2,))    
+#     out = Dense(1, activation='sigmoid', activity_regularizer=l2())(x_)
+#     model = Model(x_, out)
+#     model.compile(optimizer='SGD', loss='binary_crossentropy', metrics=['accuracy'])
+#     return model
+
 
 
 def active_learning(data, n_iter, n_sample, epochs):
@@ -72,14 +83,15 @@ def active_learning(data, n_iter, n_sample, epochs):
         evaluation.append(eval_i)
         print("Accuracy: {}".format(eval_i))        
         weights.append(model.get_weights())
-        sampled_data, data = sample_highest_margin(model, data)
+        sampled_data, rest_data = sample_highest_margin(model, data)
+        data = rest_data
 #        import pdb; pdb.set_trace()
         training_data = np.concatenate([training_data, sampled_data])        
         print("---------------------------")
     return evaluation, weights, training_data
 
 
-evaluation_ms, weights_ms, training_ms  = active_learning(data_ms, n_iter=20, n_sample=10, epochs=500)
+evaluation_ms, weights_ms, training_ms  = active_learning(data_ms, n_iter=39, n_sample=10, epochs=500)
 
 
 
@@ -104,4 +116,3 @@ plt.scatter(x2[:,0], x2[:,1], s=10., label='N2')
 plt.plot(line_ms_x, line_ms_y, label="Margin Sampling")
 plt.title("Decision Boundary with Total Data")
 plt.legend()
-
