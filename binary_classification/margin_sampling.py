@@ -83,7 +83,7 @@ def active_learning(data, n_iter, n_sample, epochs):
         evaluation.append(eval_i)
         print("Accuracy: {}".format(eval_i))        
         weights.append(model.get_weights())
-        sampled_data, rest_data = sample_highest_margin(model, data)
+        sampled_data, rest_data = sample_highest_margin(model, data,n_sample)
         data = rest_data
 #        import pdb; pdb.set_trace()
         training_data = np.concatenate([training_data, sampled_data])        
@@ -91,7 +91,7 @@ def active_learning(data, n_iter, n_sample, epochs):
     return evaluation, weights, training_data
 
 
-evaluation_ms, weights_ms, training_ms  = active_learning(data_ms, n_iter=39, n_sample=10, epochs=500)
+evaluation_ms, weights_ms, training_ms  = active_learning(data_ms, n_iter=10, n_sample=10, epochs=500)
 
 
 
