@@ -127,19 +127,15 @@ def sample_highest_least_confidence(model, data, n_sample):
 
 ##################
 
-def mnist_least_confidence(model, data):
+def mnist_least_confidence(model, data, n_sample):
     
     pred     = model.predict(data[:, :784])
     max_pred =np.amax(pred, axis = 1, keepdims=True) 
     data = np.concatenate((data, max_pred), axis=1)
-    index = data.argsort(axis=0)
-    data = np.take_along_axis(data, index , axis=0)
-    
-    rows_rest = data.shape[0]
-    
-    data_labelled = data[0:rows_rest-1000, :785]
-    data_add_training = data[rows_rest-1000:, :785] 
-   
+    index = data[:, -1].argsort()
+    data = data[index]
+    data_add_training = data[0:n_sample, :785] 
+    data_labelled = data[n_sample:, :785]
     return data_add_training, data_labelled
 
 

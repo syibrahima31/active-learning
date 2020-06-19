@@ -84,7 +84,7 @@ def active_learning(data, n_iter, n_sample, epochs):
     return evaluation, weights, training_data
 
 
-evaluation_us, weights_us, training_us  = active_learning(data_us, n_iter=39, n_sample=10, epochs=500)
+evaluation_us, weights_us, training_us  = active_learning(data_us, n_iter=10, n_sample=10, epochs=500)
 
 
 line_us_x, line_us_y = plot_decision_boundary(weights_us)
